@@ -1,0 +1,16 @@
+<%- include("partials/header", { title: "Access Restricted" }) %>
+
+<main id="main-content" class="container mx-auto px-6 py-12 flex-1">
+  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md border border-red-200 p-8 text-center">
+    <div class="mx-auto mb-4 flex items-center justify-center w-14 h-14 rounded-full bg-red-100 text-red-600 text-2xl">🚫</div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-3">Access restricted</h1>
+    <p class="text-gray-600 mb-6">You are signed in as an attendee. Organiser tools are available only to organiser accounts.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3">
+      <a href="/attendee" class="bg-indigo-600 text-white px-5 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Go to attendee dashboard</a>
+      <a href="/" class="bg-gray-200 text-gray-800 px-5 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Back to home</a>
+      <a href="/users/add-user" class="border border-indigo-600 text-indigo-700 px-5 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition">Register as organiser</a>
+    </div>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

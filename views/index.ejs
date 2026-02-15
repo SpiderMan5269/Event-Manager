@@ -1,0 +1,141 @@
+<%- include("partials/header", { title: "Home" }) %>
+
+<main id="main-content" class="container mx-auto p-6">
+  <% const isAuthed = req && req.session && req.session.user; %>
+  <% const isOrganiser = isAuthed && req.session.user.role === 'organiser'; %>
+  <!-- Hero Section -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg shadow-lg p-8 md:p-12 text-white text-center md:text-left">
+      <h1 class="text-4xl font-bold mb-4 leading-tight">Welcome to Event Manager</h1>
+      <p class="text-lg mb-8 text-indigo-100">Create events, manage bookings, and engage your audience all in one place.</p>
+      <div class="flex gap-4 flex-wrap justify-center md:justify-start">
+        <% if (isAuthed && isOrganiser) { %>
+          <a href="/organiser" class="bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Organiser Dashboard</a>
+          <a href="/attendee" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700 transition">Browse Events</a>
+        <% } else if (isAuthed && !isOrganiser) { %>
+          <a href="/attendee" class="bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Browse Events</a>
+          <a href="/no-access" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700 transition">Why organiser access?</a>
+        <% } else { %>
+          <a href="/auth/login" class="bg-white text-indigo-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">Log In</a>
+          <a href="/users/add-user" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-700 transition">Register</a>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold mb-8 text-center">Choose Your Role</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Organiser Card -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-8 border-l-4 border-indigo-600">
+        <div class="mb-4">
+          <div class="inline-block bg-indigo-100 p-4 rounded-lg">
+            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold mb-3">For Organisers</h3>
+        <p class="text-gray-600 mb-6">Create and manage events, set ticket prices, track bookings, and view detailed analytics about your events.</p>
+        <div class="space-y-2 mb-6 text-sm text-gray-700">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Create and publish events
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Manage tickets and pricing
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            View analytics & reports
+          </div>
+        </div>
+        <% if (isOrganiser) { %>
+          <a href="/organiser" class="inline-block w-full text-center bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Go to Organiser Home</a>
+        <% } else if (isAuthed) { %>
+          <a href="/no-access" class="inline-block w-full text-center bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Request organiser access</a>
+        <% } else { %>
+          <a href="/users/add-user" class="inline-block w-full text-center bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Register as Organiser</a>
+        <% } %>
+      </div>
+
+      <!-- Attendee Card -->
+      <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition p-8 border-l-4 border-green-600">
+        <div class="mb-4">
+          <div class="inline-block bg-green-100 p-4 rounded-lg">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold mb-3">For Attendees</h3>
+        <p class="text-gray-600 mb-6">Discover exciting events, book tickets easily, manage your bookings, and never miss an event you want to attend.</p>
+        <div class="space-y-2 mb-6 text-sm text-gray-700">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Browse upcoming events
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Book tickets easily
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            Manage your bookings
+          </div>
+        </div>
+        <% if (isAuthed) { %>
+          <a href="/attendee" class="inline-block w-full text-center bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">Go to Attendee Home</a>
+        <% } else { %>
+          <a href="/auth/login" class="inline-block w-full text-center bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">Log in to browse events</a>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="mb-12">
+    <h2 class="text-3xl font-bold mb-8 text-center">Key Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% const organiserLink = isOrganiser ? '/organiser' : (isAuthed ? '/no-access' : '/users/add-user'); %>
+      <% const analyticsLink = isOrganiser ? '/organiser/analytics' : (isAuthed ? '/no-access' : '/users/add-user'); %>
+      <% const attendeeLink = isAuthed ? '/attendee' : '/auth/login'; %>
+      <% const profileLink = isAuthed ? '/profile' : '/auth/login'; %>
+
+      <a href="<%= organiserLink %>" class="bg-blue-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-blue-100 cursor-pointer">
+        <div class="text-3xl mb-3">🎫</div>
+        <h4 class="font-bold text-lg mb-2">Easy Ticket Management</h4>
+        <p class="text-gray-700 text-sm">Set custom prices and quantities for different ticket types (Full & Concession)</p>
+      </a>
+      <a href="<%= analyticsLink %>" class="bg-purple-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-purple-100 cursor-pointer">
+        <div class="text-3xl mb-3">📊</div>
+        <h4 class="font-bold text-lg mb-2">Detailed Analytics</h4>
+        <p class="text-gray-700 text-sm">Track revenue, occupancy rates, and booking statistics in real-time</p>
+      </a>
+      <a href="<%= profileLink %>" class="bg-pink-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-pink-100 cursor-pointer">
+        <div class="text-3xl mb-3">🔒</div>
+        <h4 class="font-bold text-lg mb-2">Secure & Reliable</h4>
+        <p class="text-gray-700 text-sm">Password-protected accounts with secure session management</p>
+      </a>
+      <a href="<%= attendeeLink %>" class="bg-green-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-green-100 cursor-pointer">
+        <div class="text-3xl mb-3">🔍</div>
+        <h4 class="font-bold text-lg mb-2">Smart Search</h4>
+        <p class="text-gray-700 text-sm">Easily find events by title, description, or date</p>
+      </a>
+      <a href="<%= attendeeLink %>" class="bg-yellow-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-yellow-100 cursor-pointer">
+        <div class="text-3xl mb-3">📱</div>
+        <h4 class="font-bold text-lg mb-2">Responsive Design</h4>
+        <p class="text-gray-700 text-sm">Works perfectly on desktop and tablet</p>
+      </a>
+      <a href="<%= profileLink %>" class="bg-indigo-50 p-6 rounded-lg hover:shadow-lg transition hover:bg-indigo-100 cursor-pointer">
+        <div class="text-3xl mb-3">💾</div>
+        <h4 class="font-bold text-lg mb-2">Persistent Data</h4>
+        <p class="text-gray-700 text-sm">Your sessions persist for 7 days, so you stay logged in</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<%- include("partials/footer") %>

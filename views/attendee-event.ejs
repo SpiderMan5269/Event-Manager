@@ -1,0 +1,80 @@
+<%- include("partials/header", { title: event.title }) %>
+
+<main id="main-content" class="container mx-auto px-6 py-12 flex-1">
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-8">
+      <a href="/attendee" class="text-indigo-600 hover:text-indigo-700 font-medium flex items-center">← Back to Events</a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-8 border border-gray-200">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4"><%= event.title %></h1>
+      <p class="text-lg text-gray-700 mb-3 leading-relaxed"><%= event.description %></p>
+      <p class="text-sm text-gray-500 mb-6 flex items-center"><span class="mr-2">📅</span><%= event.event_date %></p>
+
+      <% if (typeof errors !== 'undefined' && errors && errors.length) { %>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
+          <h3 class="font-semibold text-red-800 mb-2">Please correct the following errors:</h3>
+          <ul class="list-disc pl-5 text-red-700 space-y-1">
+            <% errors.forEach(function(err) { %>
+              <li><%= err.msg %></li>
+            <% }) %>
+          </ul>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/attendee/events/<%= event.id %>/register" class="space-y-6" novalidate>
+        <div>
+          <label for="attendee_name" class="block text-lg font-medium text-gray-900 mb-2">Your Name</label>
+          <input id="attendee_name" name="attendee_name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" value="<%= (typeof data !== 'undefined' && data.attendee_name) ? data.attendee_name : '' %>" aria-describedby="<%= (typeof fieldErrors !== 'undefined' && fieldErrors.attendee_name) ? 'attendee_name_error' : '' %>">
+          <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.attendee_name) { %>
+            <small id="attendee_name_error" class="text-red-600 text-sm mt-1 block"><%= fieldErrors.attendee_name[0] %></small>
+          <% } %>
+        </div>
+
+        <div class="border-t pt-6">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Select Tickets</h3>
+
+          <% tickets.forEach(ticket => { %>
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-4">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <div class="font-bold text-xl capitalize text-gray-900"><%= ticket.type %> Ticket</div>
+                  <div class="text-lg text-indigo-600 font-semibold">£<%= ticket.price.toFixed(2) %></div>
+                </div>
+                <div class="text-sm font-medium">
+                  <% if (ticket.remaining_quantity > 0) { %>
+                    <span class="text-green-700 bg-green-100 px-3 py-1 rounded-full"><%= ticket.remaining_quantity %> available</span>
+                  <% } else { %>
+                    <span class="text-red-700 bg-red-100 px-3 py-1 rounded-full font-semibold">Sold Out</span>
+                  <% } %>
+                </div>
+              </div>
+              <div>
+                <label for="<%= ticket.type %>_tickets" class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                <input 
+                  id="<%= ticket.type %>_tickets" 
+                  type="number" 
+                  min="0" 
+                  name="<%= ticket.type %>_tickets" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent <%= ticket.remaining_quantity === 0 ? 'bg-gray-100 cursor-not-allowed' : '' %>"
+                  value="<%= (typeof data !== 'undefined' && data[ (ticket.type + '_tickets') ]) ? data[ (ticket.type + '_tickets') ] : 0 %>" 
+                  aria-describedby="<%= (typeof fieldErrors !== 'undefined' && fieldErrors[ ticket.type + '_tickets' ]) ? (ticket.type + '_tickets_error') : '' %>"
+                  <% if (ticket.remaining_quantity === 0) { %>disabled<% } %>>
+                <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors[ ticket.type + '_tickets' ]) { %>
+                  <small id="<%= ticket.type %>_tickets_error" class="text-red-600 text-sm mt-1 block"><%= fieldErrors[ ticket.type + '_tickets' ][0] %></small>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="flex gap-4 pt-4">
+          <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">Book Tickets</button>
+          <a href="/attendee" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

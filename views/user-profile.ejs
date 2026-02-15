@@ -1,0 +1,77 @@
+<%- include("partials/header", { title: "User Profile" }) %>
+
+  <main id="main-content" class="container mx-auto p-6 max-w-2xl">
+    <div class="mb-6">
+      <a href="/" class="text-indigo-600 hover:underline text-sm font-medium">← Back to Home</a>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-6">Your Profile</h1>
+
+    <% if (typeof errors !== 'undefined' && errors && errors.length) { %>
+      <div class="bg-red-50 border border-red-200 p-4 mb-6 rounded" role="alert">
+        <ul class="list-disc pl-5 text-red-700">
+          <% errors.forEach(function(err) { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+      <div class="bg-green-50 border border-green-200 p-4 mb-6 rounded" role="alert">
+        <p class="text-green-700 font-medium"><%= successMessage %></p>
+      </div>
+    <% } %>
+
+    <!-- Account Info Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Account Information</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm font-medium text-gray-600">Username</label>
+          <p class="text-lg font-semibold text-gray-900"><%= user.user_name %></p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-600">User ID</label>
+          <p class="text-lg font-semibold text-gray-900">#<%= user.user_id %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Change Password</h2>
+      <form method="POST" action="/profile/change-password" class="space-y-4" novalidate>
+        <label class="block">
+          <span class="text-sm font-medium">Current Password</span>
+          <input id="current_password" name="current_password" type="password" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm" required>
+          <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.current_password) { %>
+            <small class="text-red-600"><%= fieldErrors.current_password[0] %></small>
+          <% } %>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">New Password</span>
+          <input id="new_password" name="new_password" type="password" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm" required>
+          <small class="text-gray-500">At least 8 characters recommended</small>
+          <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.new_password) { %>
+            <small class="text-red-600"><%= fieldErrors.new_password[0] %></small>
+          <% } %>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium">Confirm New Password</span>
+          <input id="confirm_password" name="confirm_password" type="password" class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm" required>
+          <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.confirm_password) { %>
+            <small class="text-red-600"><%= fieldErrors.confirm_password[0] %></small>
+          <% } %>
+        </label>
+
+        <div class="pt-4">
+          <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 font-medium">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <%- include("partials/footer") %>

@@ -1,0 +1,87 @@
+<%- include("partials/header", { title: "Register" }) %>
+
+<main id="main-content" class="container mx-auto p-6">
+  <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h1 class="text-3xl font-bold mb-2 text-center">Create Account</h1>
+    <p class="text-center text-gray-600 mb-6">Join to manage or attend events</p>
+
+    <% if (typeof errors !== 'undefined' && errors && errors.length) { %>
+      <div class="bg-red-50 border border-red-200 rounded p-4 mb-4" role="alert">
+        <p class="text-red-700 font-semibold mb-2">Please fix the following errors:</p>
+        <ul class="list-disc pl-5 text-red-700 space-y-1">
+          <% errors.forEach(function(err) { %>
+            <li class="text-sm"><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/users/add-user" class="space-y-4" novalidate>
+      <div>
+        <label for="user_name" class="block text-sm font-semibold mb-2">Username</label>
+        <input 
+          id="user_name" 
+          name="user_name" 
+          type="text" 
+          placeholder="Choose a username"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" 
+          value="<%= data && data.user_name ? data.user_name : '' %>" 
+          aria-describedby="<%= (typeof fieldErrors !== 'undefined' && fieldErrors.user_name) ? 'user_name_error' : '' %>">
+        <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.user_name) { %>
+          <small id="user_name_error" class="text-red-600 text-sm mt-1 block"><%= fieldErrors.user_name[0] %></small>
+        <% } %>
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-semibold mb-2">Password</label>
+        <input 
+          id="password" 
+          name="password" 
+          type="password" 
+          placeholder="Enter a strong password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" 
+          aria-describedby="<%= (typeof fieldErrors !== 'undefined' && fieldErrors.password) ? 'password_error' : '' %>">
+        <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.password) { %>
+          <small id="password_error" class="text-red-600 text-sm mt-1 block"><%= fieldErrors.password[0] %></small>
+        <% } %>
+      </div>
+
+      <div>
+        <label for="confirm_password" class="block text-sm font-semibold mb-2">Confirm Password</label>
+        <input 
+          id="confirm_password" 
+          name="confirm_password" 
+          type="password" 
+          placeholder="Re-enter your password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" 
+          aria-describedby="<%= (typeof fieldErrors !== 'undefined' && fieldErrors.confirm_password) ? 'confirm_password_error' : '' %>">
+        <% if (typeof fieldErrors !== 'undefined' && fieldErrors && fieldErrors.confirm_password) { %>
+          <small id="confirm_password_error" class="text-red-600 text-sm mt-1 block"><%= fieldErrors.confirm_password[0] %></small>
+        <% } %>
+      </div>
+
+      <div class="bg-indigo-50 rounded-lg p-4 mt-6">
+        <label class="flex items-center space-x-3 cursor-pointer">
+          <input 
+            type="checkbox" 
+            name="organiser" 
+            value="yes" 
+            class="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500" 
+            <%= data && data.organiser === 'yes' ? 'checked' : '' %> />
+          <div>
+            <span class="font-semibold text-gray-900">Register as an Organiser</span>
+            <p class="text-xs text-gray-600">Create and manage events</p>
+          </div>
+        </label>
+      </div>
+
+      <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition mt-6">Create Account</button>
+    </form>
+
+    <p class="text-center text-sm text-gray-600 mt-4">
+      Already have an account? <a href="/auth/login" class="text-indigo-600 hover:underline font-medium">Log in</a>
+    </p>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

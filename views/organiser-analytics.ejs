@@ -1,0 +1,154 @@
+<%- include("partials/header", { title: "Analytics Dashboard" }) %>
+
+    <main id="main-content" class="container mx-auto p-6">
+        <div class="mb-6">
+            <a href="/organiser" class="text-indigo-600 hover:underline text-sm font-medium">← Back to Organiser
+                Home</a>
+        </div>
+
+        <h1 class="text-3xl font-bold mb-6">Analytics Dashboard</h1>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Events</p>
+                <p class="text-3xl font-bold text-indigo-600">
+                    <%= stats.totalEvents %>
+                </p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <p class="text-gray-600 text-sm font-medium">Published Events</p>
+                <p class="text-3xl font-bold text-green-600">
+                    <%= stats.publishedEvents %>
+                </p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Bookings</p>
+                <p class="text-3xl font-bold text-blue-600">
+                    <%= stats.totalBookings %>
+                </p>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Revenue</p>
+                <p class="text-3xl font-bold text-purple-600">£<%= stats.totalRevenue.toFixed(2) %>
+                </p>
+            </div>
+        </div>
+
+        <!-- Event Performance Table -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-bold mb-4">Event Performance</h2>
+
+            <% if (!events || events.length===0) { %>
+                <p class="text-gray-600">No events to analyze yet.</p>
+                <% } else { %>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="border-b-2 border-gray-300 bg-gray-50">
+                                <tr>
+                                    <th class="text-left py-3 px-4 font-semibold text-gray-700">Event Title</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Status</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Total Capacity</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Tickets Sold</th>
+                                    <th class="text-center py-3 px-4 font-semibold text-gray-700">Occupancy %</th>
+                                    <th class="text-right py-3 px-4 font-semibold text-gray-700">Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <% events.forEach(event=> {
+                                    const occupancy = event.total_capacity > 0 ? ((event.tickets_sold /
+                                    event.total_capacity) * 100).toFixed(1) : 0;
+                                    %>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="py-3 px-4 text-gray-900 font-medium">
+                                            <a href="/organiser/events/<%= event.id %>/view"
+                                                class="text-indigo-600 hover:underline">
+                                                <%= event.title %>
+                                            </a>
+                                        </td>
+                                        <td class="text-center py-3 px-4">
+                                            <span
+                                                class="inline-block px-3 py-1 rounded-full text-white text-xs font-semibold <%= event.status === 'published' ? 'bg-green-500' : 'bg-yellow-500' %>">
+                                                <%= event.status.charAt(0).toUpperCase() + event.status.slice(1) %>
+                                            </span>
+                                        </td>
+                                        <td class="text-center py-3 px-4 text-gray-600">
+                                            <%= event.total_capacity %>
+                                        </td>
+                                        <td class="text-center py-3 px-4 font-semibold text-gray-900">
+                                            <%= event.tickets_sold %>
+                                        </td>
+                                        <td class="text-center py-3 px-4">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <div class="w-24 bg-gray-200 rounded-full h-2">
+                                                    <div class="bg-indigo-600 h-2 rounded-full"
+                                                        style="width: <%= occupancy %>%"></div>
+                                                </div>
+                                                <span class="text-sm font-semibold text-gray-700">
+                                                    <%= occupancy %>%
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-right py-3 px-4 font-semibold text-gray-900">£<%=
+                                                event.revenue.toFixed(2) %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+        </div>
+
+        <!-- Detailed Event Stats -->
+        <% if (events && events.length> 0) { %>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <% events.forEach(event=> { %>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4">
+                            <%= event.title %>
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">Event Date:</span>
+                                <span class="font-semibold">
+                                    <%= event.event_date %>
+                                </span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">Total Bookings:</span>
+                                <span class="font-semibold">
+                                    <%= event.total_bookings %>
+                                </span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">Full Tickets Sold:</span>
+                                <span class="font-semibold">
+                                    <%= event.full_tickets_sold %>
+                                </span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">Concession Tickets Sold:</span>
+                                <span class="font-semibold">
+                                    <%= event.concession_tickets_sold %>
+                                </span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">Avg Tickets per Booking:</span>
+                                <span class="font-semibold">
+                                    <%= event.total_bookings> 0 ? (event.tickets_sold / event.total_bookings).toFixed(1)
+                                        : '0' %>
+                                </span>
+                            </div>
+                            <div class="flex justify-between pt-2 bg-green-50 p-2 rounded">
+                                <span class="text-gray-700 font-semibold">Total Revenue:</span>
+                                <span class="font-bold text-green-600">£<%= event.revenue.toFixed(2) %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } %>
+    </main>
+
+    <%- include("partials/footer") %>

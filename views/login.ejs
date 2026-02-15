@@ -1,0 +1,55 @@
+<%- include("partials/header", { title: "Login" }) %>
+
+<main id="main-content" class="container mx-auto p-6">
+  <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h1 class="text-3xl font-bold mb-2 text-center">Welcome Back</h1>
+    <p class="text-center text-gray-600 mb-6">Sign in to your account</p>
+
+    <% if (typeof errors !== 'undefined' && errors && errors.length) { %>
+      <div class="bg-red-50 border border-red-200 rounded p-4 mb-4" role="alert">
+        <p class="text-red-700 font-semibold mb-2">Login failed:</p>
+        <ul class="list-disc pl-5 text-red-700 space-y-1">
+          <% errors.forEach(function(err) { %>
+            <li class="text-sm"><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/auth/login" class="space-y-4" novalidate>
+      <div>
+        <label for="username" class="block text-sm font-semibold mb-2">Username</label>
+        <input 
+          id="username" 
+          name="username" 
+          type="text" 
+          placeholder="Enter your username"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" 
+          value="<%= data && data.username ? data.username : '' %>">
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-semibold mb-2">Password</label>
+        <input 
+          id="password" 
+          name="password" 
+          type="password" 
+          placeholder="Enter your password"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+      </div>
+
+      <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition mt-6">Sign In</button>
+    </form>
+
+    <div class="mt-6 pt-6 border-t border-gray-200 space-y-2">
+      <p class="text-center">
+        <a href="/auth/forgot-password" class="text-indigo-600 hover:underline font-medium text-sm">Forgot your password?</a>
+      </p>
+      <p class="text-center text-sm text-gray-600">
+        Don't have an account? <a href="/users/add-user" class="text-indigo-600 hover:underline font-medium">Register here</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<%- include("partials/footer") %>

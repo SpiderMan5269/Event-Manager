@@ -1,0 +1,49 @@
+<%- include("partials/header", { title: "Booking Confirmed" }) %>
+
+<main id="main-content" class="container mx-auto p-6">
+  <div class="bg-green-50 border border-green-200 rounded p-6 text-center mb-6">
+    <h1 class="text-2xl font-bold text-green-700 mb-2">Booking Confirmed!</h1>
+    <p class="text-green-600 mb-4">Your reservation has been successfully completed.</p>
+  </div>
+
+  <div class="bg-white rounded shadow-sm p-6 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Booking Details</h2>
+    <div class="space-y-3">
+      <div class="flex justify-between">
+        <span class="text-gray-700">Event:</span>
+        <span class="font-medium"><a class="text-indigo-600 hover:underline" href="/attendee/events/<%= event.id %>"><%= event.title %></a></span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-gray-700">Date:</span>
+        <span class="font-medium"><%= event.event_date %></span>
+      </div>
+      <div class="flex justify-between">
+        <span class="text-gray-700">Your Name:</span>
+        <span class="font-medium"><%= booking.attendee_name %></span>
+      </div>
+      <% if (booking.full_tickets > 0) { %>
+        <div class="flex justify-between">
+          <span class="text-gray-700">Full Tickets:</span>
+          <span class="font-medium"><%= booking.full_tickets %></span>
+        </div>
+      <% } %>
+      <% if (booking.concession_tickets > 0) { %>
+        <div class="flex justify-between">
+          <span class="text-gray-700">Concession Tickets:</span>
+          <span class="font-medium"><%= booking.concession_tickets %></span>
+        </div>
+      <% } %>
+      <div class="flex justify-between pt-3 border-t">
+        <span class="text-gray-700">Booked At:</span>
+        <span class="font-medium"><%= booking.booked_at %></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-x-3">
+    <a href="/attendee" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Back to Events</a>
+    <a href="/attendee/my-bookings" class="text-sm text-indigo-600 hover:underline">View My Bookings</a>
+  </div>
+</main>
+
+<%- include("partials/footer") %>
